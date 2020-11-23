@@ -4,7 +4,6 @@ import (
 	"archive/zip"
 	"fmt"
 	"io"
-	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -83,14 +82,15 @@ This will serve the folder /home/ezekiel/s3cr3t-f1l3s on 127.0.0.1:8080:
 			io.Copy(w, openfile)
 		})
 
-		fmt.Printf("Now serving on http://%s:%s/%s\n", ip, port, fileShort)
 		srv := &http.Server{
 			Addr: ip + ":" + port,
 		}
 
 		if err := srv.ListenAndServe(); err != nil {
-			log.Printf("HTTP Server: ListenAndServe() error: %s", err)
+			logrus.Errorf("%s", err)
 		}
+
+		fmt.Printf("Now serving on http://%s:%s/%s\n", ip, port, fileShort)
 	},
 }
 
