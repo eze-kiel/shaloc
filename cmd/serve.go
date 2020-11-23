@@ -20,7 +20,9 @@ This will serve the file test.txt on 127.0.0.1:8080
   shaloc serve -f test.txt
 
 This will serve blah.txt on 192.168.1.36:1337:
-  shaloc serve -f blah.txt -i 192.168.1.36 -p 1337`,
+  shaloc serve -f blah.txt -i 192.168.1.36 -p 1337
+`,
+
 	Run: func(cmd *cobra.Command, args []string) {
 		ip, _ := cmd.Flags().GetString("ip")
 		port, _ := cmd.Flags().GetString("port")

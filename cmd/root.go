@@ -15,7 +15,8 @@ var rootCmd = &cobra.Command{
 	Short: "SHAre files LOCally !",
 	Long: `SHAre files LOCally !
 	
-shaloc is a tool designed to share files on a local network over HTTP in command line.`,
+shaloc is a tool designed to share files on a local network over HTTP in command line.
+`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

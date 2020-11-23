@@ -23,6 +23,7 @@ This will create a file called 'out':
 This will create a file called new.txt:
   shaloc get -u http://192.168.1.133/file.txt -n new.txt
 `,
+
 	Run: func(cmd *cobra.Command, args []string) {
 		url, _ := cmd.Flags().GetString("url")
 		name, _ := cmd.Flags().GetString("name")
