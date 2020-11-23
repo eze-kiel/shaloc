@@ -4,11 +4,13 @@
 
 (I didn't find anything better...)
 
+`shaloc` is a LAN-scoped sharing tool. With only 2 principal commands, it is designed to be intuitive, easy and fast to use.
+
 ## Getting started
 
 There is multiple ways to get `shaloc` on your machine. You can either:
 
-* Clone the repo and build it yourself
+* Clone the repo and build it yourself:
 
 ```
 $ git clone https://github.com/eze-kiel/shaloc.git
