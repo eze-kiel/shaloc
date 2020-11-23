@@ -90,7 +90,7 @@ This will serve the folder /home/ezekiel/s3cr3t-f1l3s on 127.0.0.1:8080:
 			logrus.Errorf("%s", err)
 		}
 
-		fmt.Printf("Now serving on http://%s:%s/%s\n", ip, port, fileShort)
+		fmt.Printf("Serving %s on http://%s:%s/%s\n", file, ip, port, fileShort)
 	},
 }
 
