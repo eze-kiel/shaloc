@@ -27,14 +27,14 @@ This will create a file called new.txt:
 
 	Run: func(cmd *cobra.Command, args []string) {
 		url, _ := cmd.Flags().GetString("url")
-		name, _ := cmd.Flags().GetString("name")
+		output, _ := cmd.Flags().GetString("output")
 
 		if url == "" {
 			fmt.Println("You must provide a URL with the flag -u !")
 			os.Exit(1)
 		}
 
-		err := download(name, url)
+		err := download(output, url)
 		if err != nil {
 			logrus.Errorf("%s\n", err)
 			return
@@ -47,7 +47,7 @@ This will create a file called new.txt:
 func init() {
 	rootCmd.AddCommand(getCmd)
 	getCmd.Flags().StringP("url", "u", "", "URL to download the file from.")
-	getCmd.Flags().StringP("name", "n", "out", "Name of the file that will be downloaded.")
+	getCmd.Flags().StringP("output", "o", "out", "Name of the file that will be downloaded.")
 }
 
 func download(filepath string, url string) error {

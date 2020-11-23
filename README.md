@@ -26,7 +26,43 @@ The releases are [here](https://github.com/eze-kiel/shaloc/releases).
 
 This section will cover typical use cases.
 
-/* TBD */
+### Share a single file
+
+* To send:
+
+```
+$ shaloc serve -f myfile.txt
+$ ./shaloc serve -f toto.txt 
+Now serving on http://127.0.0.1:8080/myfile.txt
+```
+
+Note that you can choose the IP and the port (respectively -i and -p).
+
+* To receive:
+
+```
+$ shaloc get -u http://127.0.0.1:8080/myfile.txt
+```
+
+Or whatever tool you want (`wget`, `curl`, your favorite browser...).
+
+The content will be wrote in a file called `out`, but you can change the name with the flag -o.
+
+### Share a folder
+
+* To send:
+
+```
+$ shaloc serve -F /home/s3cr3t-f0ld3r
+Now serving on http://127.0.0.1:8080/AHjdifpLMz.zip
+```
+
+In order to simplify the use, the zip file is renamed with a random string.
+You can also specify the IP addresse to serve on, as well as the port with the same flags as before (-i and -p).
+
+* To receive:
+
+You can receive the zipped file using the same command as for a single file.
 
 ## Completion
 
