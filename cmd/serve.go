@@ -1,12 +1,16 @@
 package cmd
 
 import (
+	"archive/zip"
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -29,19 +33,33 @@ This will serve blah.txt on 192.168.1.36:1337:
 		ip, _ := cmd.Flags().GetString("ip")
 		port, _ := cmd.Flags().GetString("port")
 		file, _ := cmd.Flags().GetString("file")
+		folder, _ := cmd.Flags().GetString("folder")
 
-		if file == "" {
-			fmt.Println("You must provide a file to share with the flag -f !")
+		if file == "" && folder == "" {
+			fmt.Println("You must provide at least a file to share (-f) or a folder (-F) !")
 			os.Exit(1)
 		}
 
-		isFol, err := isFolder(file)
-		if err != nil {
-			logrus.Errorf("%s", err)
+		if file != "" && folder != "" {
+			fmt.Println("You cannot provide a file and a folder !")
+			os.Exit(1)
 		}
 
-		if isFol {
+		if folder != "" {
+			isFol, err := isFolder(folder)
+			if err != nil {
+				logrus.Errorf("%s", err)
+				return
+			}
 
+			// If the provided file is a folder, zip it and share it
+			if isFol {
+				file, err = compressFolder(folder)
+				if err != nil {
+					logrus.Errorf("%s", err)
+					return
+				}
+			}
 		}
 
 		// If the user provided a full path, we want to keep only the filename.
@@ -77,6 +95,7 @@ func init() {
 	serveCmd.Flags().StringP("ip", "i", "127.0.0.1", "IP address to serve on.")
 	serveCmd.Flags().StringP("port", "p", "8080", "Port to serve on.")
 	serveCmd.Flags().StringP("file", "f", "", "File to share.")
+	serveCmd.Flags().StringP("folder", "F", "", "Folder to share. It will be zipped.")
 }
 
 func isFolder(name string) (bool, error) {
@@ -90,4 +109,79 @@ func isFolder(name string) (bool, error) {
 	}
 
 	return false, nil
+}
+
+// Generate a random string ID
+func randID() string {
+	var runes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	b := make([]rune, 10)
+	for i := range b {
+		b[i] = runes[rand.Intn(len(runes))]
+	}
+	return string(b)
+}
+
+func compressFolder(source string) (string, error) {
+	rand.Seed(time.Now().UnixNano())
+	id := randID()
+
+	targetFile := "/tmp/" + id + ".zip"
+	zipfile, err := os.Create(targetFile)
+	if err != nil {
+		return "", err
+	}
+	defer zipfile.Close()
+
+	archive := zip.NewWriter(zipfile)
+	defer archive.Close()
+
+	info, err := os.Stat(source)
+	if err != nil {
+		return "", nil
+	}
+
+	var baseDir string
+	if info.IsDir() {
+		baseDir = filepath.Base(source)
+	}
+
+	filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		header, err := zip.FileInfoHeader(info)
+		if err != nil {
+			return err
+		}
+
+		if baseDir != "" {
+			header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
+		}
+
+		if info.IsDir() {
+			header.Name += "/"
+		} else {
+			header.Method = zip.Deflate
+		}
+
+		writer, err := archive.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		file, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		_, err = io.Copy(writer, file)
+		return err
+	})
+
+	return targetFile, err
 }
