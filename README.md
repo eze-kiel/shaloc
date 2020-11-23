@@ -78,7 +78,7 @@ You can receive the zip file using the same command as for a single file. By def
 
 ### Share a limited number of files
 
-By default, the file can be downloaded an unlimited amout of times. If you want you file to be downloaded only a certain number of times, you can specify it thanks to the `-m` flag. If it is a negative value (which is the default case), your file will be available until server shutdown. Elsewhere, the value of the flag defines the number of times it can be downloaded. Here is an example:
+By default, the file can be downloaded an unlimited amout of times. If you want your file to be downloaded only a certain number of times, you can specify it thanks to the `-m` flag. If it is a negative value (which is the default case), your file will be available until server shutdown. Elsewhere, the value of the flag defines the number of times it can be downloaded. Here is an example:
 
 ```
 $ ./shaloc serve -f foobar.txt -m 2
