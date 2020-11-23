@@ -20,6 +20,8 @@ And then move `shaloc` somewhere in the range of your PATH.
 
 * Download the latest release depending on your architecture.
 
+The releases are [here](https://github.com/eze-kiel/shaloc/releases).
+
 ## Usage
 
 This section will cover typical use cases.
