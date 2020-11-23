@@ -19,14 +19,17 @@ import (
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "serve a file",
-	Long: `serve allow you to start a HTTP server to serve a file. For example:
+	Short: "serve a file or a folder",
+	Long: `serve allow you to start a HTTP server to serve a file or a folder. For example:
 
 This will serve the file test.txt on 127.0.0.1:8080
   shaloc serve -f test.txt
 
 This will serve blah.txt on 192.168.1.36:1337:
   shaloc serve -f blah.txt -i 192.168.1.36 -p 1337
+
+This will serve the folder /home/ezekiel/s3cr3t-f1l3s on 127.0.0.1:8080:
+  shaloc server -F /home/ezekiel/s3cr3t-f1l3s
 `,
 
 	Run: func(cmd *cobra.Command, args []string) {
