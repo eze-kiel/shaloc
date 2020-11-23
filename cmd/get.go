@@ -40,7 +40,7 @@ This will create a file called new.txt:
 			return
 		}
 
-		fmt.Println("Downloaded: " + url)
+		fmt.Println("Downloaded: " + output + " from " + url)
 	},
 }
 
