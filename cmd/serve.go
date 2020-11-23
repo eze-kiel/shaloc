@@ -35,12 +35,12 @@ This will serve blah.txt on 192.168.1.36:1337:
 			os.Exit(1)
 		}
 
-		isF, err := isFolder(file)
+		isFol, err := isFolder(file)
 		if err != nil {
 			logrus.Errorf("%s", err)
 		}
 
-		if isF {
+		if isFol {
 
 		}
 
