@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -33,7 +34,11 @@ This will serve blah.txt on 192.168.1.36:1337:
 			os.Exit(1)
 		}
 
-		http.HandleFunc("/"+file, func(w http.ResponseWriter, r *http.Request) {
+		// If the user provided a full path, we want to keep only the filename.
+		parts := strings.Split(file, "/")
+		fileShort := parts[len(parts)-1]
+
+		http.HandleFunc("/"+fileShort, func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Disposition", "attachment; filename="+file)
 			w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
 			w.Header().Set("Content-Length", r.Header.Get("Content-Length"))
@@ -47,7 +52,7 @@ This will serve blah.txt on 192.168.1.36:1337:
 			io.Copy(w, Openfile)
 		})
 
-		fmt.Printf("Now serving on http://%s:%s/%s\n", ip, port, file)
+		fmt.Printf("Now serving on http://%s:%s/%s\n", ip, port, fileShort)
 		srv := &http.Server{Addr: ip + ":" + port}
 
 		// Handles networking errors, such as being unable to bind IP or port
