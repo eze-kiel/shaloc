@@ -20,7 +20,7 @@ import (
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "serve a file or a folder",
+	Short: "Serve a file or a folder",
 	Long: `serve allow you to start a HTTP server to serve a file or a folder. For example:
 
 This will serve the file test.txt on 127.0.0.1:8080
