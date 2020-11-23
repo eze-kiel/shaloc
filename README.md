@@ -65,15 +65,16 @@ Downloaded: better-name.txt from http://127.0.0.1:8080/toto.txt
 * To send:
 
 ```
-$ shaloc serve -F /home/sup3r-f0ld3r
-Serving /home/sup3r-f0ld3r on http://127.0.0.1:8080/AHjdifpLMz.zip
+$ shaloc serve -F /home/user/sup3r-f0ld3r
+INFO[0000] Zipping /home/user/sup3r-f0ld3r into /tmp/sup3r-f0ld3r.zip... 
+Serving /tmp/sup3r-f0ld3r.zip on http://127.0.0.1:8080/sup3r-f0ld3r.zip
 ```
 
 You can also specify the IP addresse to serve on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`.
 
 * To receive:
 
-You can receive the zip file using the same command as for a single file.
+You can receive the zip file using the same command as for a single file. By default, it will also be named `out`.
 
 ### Share a limited number of files
 
