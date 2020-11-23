@@ -34,8 +34,7 @@ This section will cover typical use cases.
 
 ```
 $ shaloc serve -f myfile.txt
-$ ./shaloc serve -f toto.txt 
-Now serving on http://127.0.0.1:8080/myfile.txt
+Serving myfile.txt on http://127.0.0.1:8080/myfile.txt
 ```
 
 Note that you can choose the IP and the port (respectively -i and -p).
@@ -56,7 +55,7 @@ The content will be wrote in a file called `out`, but you can change the name wi
 
 ```
 $ shaloc serve -F /home/s3cr3t-f0ld3r
-Now serving on http://127.0.0.1:8080/AHjdifpLMz.zip
+Serving /home/s3cr3t-f0ld3r on http://127.0.0.1:8080/AHjdifpLMz.zip
 ```
 
 In order to simplify the use, the zip file is renamed with a random string.
