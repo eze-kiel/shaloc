@@ -22,6 +22,10 @@ And then move `shaloc` somewhere in the range of your PATH.
 
 ## Usage
 
+This section will cover typical use cases.
+
+/* TBD */
+
 ## Completion
 
 Completion is supported on multiple shells.
