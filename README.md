@@ -54,8 +54,8 @@ The content will be wrote in a file called `out`, but you can change the name wi
 * To send:
 
 ```
-$ shaloc serve -F /home/s3cr3t-f0ld3r
-Serving /home/s3cr3t-f0ld3r on http://127.0.0.1:8080/AHjdifpLMz.zip
+$ shaloc serve -F /home/sup3r-f0ld3r
+Serving /home/sup3r-f0ld3r on http://127.0.0.1:8080/AHjdifpLMz.zip
 ```
 
 In order to simplify the use, the zip file is renamed with a random string.
