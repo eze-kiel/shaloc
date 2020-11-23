@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -137,6 +138,13 @@ func randID(n int) string {
 
 func compressFolder(source string) (string, error) {
 	targetFile := "/tmp/" + filepath.Base(source) + ".zip"
+
+	logrus.Infof("Zipping %s into %s...", source, targetFile)
+
+	// Init and start the spinner
+	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
+	s.Start()
+
 	zipfile, err := os.Create(targetFile)
 	if err != nil {
 		return "", err
@@ -193,6 +201,8 @@ func compressFolder(source string) (string, error) {
 		_, err = io.Copy(writer, file)
 		return err
 	})
+
+	s.Stop()
 
 	return targetFile, err
 }
