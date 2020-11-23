@@ -53,7 +53,7 @@ func init() {
 func download(filepath string, url string) error {
 
 	// Init and start the spinner
-	s := spinner.New(spinner.CharSets[23], 100*time.Millisecond)
+	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Start()
 
 	// Get the data
