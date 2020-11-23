@@ -2,7 +2,7 @@
 
 **SHA**re files **LOC**ally !
 
-(I didn't find anything better...)
+(I couldn't find a better name...)
 
 `shaloc` is a LAN-scoped sharing tool. With only 2 main commands, it is designed to be intuitive, easy and fast to use.
 
