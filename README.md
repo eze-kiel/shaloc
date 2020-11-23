@@ -75,6 +75,20 @@ You can also specify the IP addresse to serve on, as well as the port with the s
 
 You can receive the zip file using the same command as for a single file.
 
+### Share a limited number of files
+
+By default, the file can be downloaded an unlimited amout of times. If you want you file to be downloaded only a certain number of times, you can specify it thanks to the `-m` flag. If it is a negative value (which is the default case), your file will be available until server shutdown. Elsewhere, the value of the flag defines the number of times it can be downloaded. Here is an example:
+
+```
+$ ./shaloc serve -f foobar.txt -m 2
+Serving foobar.txt on http://127.0.0.1:8080/foobar.txt
+INFO[0003] Downloads remaining: 1                       
+INFO[0006] Downloads remaining: 0                       
+INFO[0006] Max number of downloads reached, shutting down the server.
+```
+
+It works for both `-f` and `-F` flags.
+
 ### Clean /tmp
 
 If you do not shutdown your computer often like me, the .zip created by `shaloc` while compressing folders will stay for a long time in /tmp. So there is the `clean` command that will wipe everything that ends by ".zip" in /tmp. It is super easy to use:
