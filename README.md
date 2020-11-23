@@ -6,6 +6,20 @@
 
 ## Getting started
 
+There is multiple ways to get `shaloc` on your machine. You can either:
+
+* Clone the repo and build it yourself
+
+```
+$ git clone https://github.com/eze-kiel/shaloc.git
+$ cd shaloc
+$ go build .
+```
+
+And then move `shaloc` somewhere in the range of your PATH.
+
+* Download the latest release depending on your architecture.
+
 ## Usage
 
 ## Completion
