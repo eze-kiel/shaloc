@@ -4,7 +4,7 @@
 
 (I didn't find anything better...)
 
-`shaloc` is a LAN-scoped sharing tool. With only 2 principal commands, it is designed to be intuitive, easy and fast to use.
+`shaloc` is a LAN-scoped sharing tool. With only 2 main commands, it is designed to be intuitive, easy and fast to use.
 
 ## Getting started
 
