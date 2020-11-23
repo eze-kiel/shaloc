@@ -65,6 +65,15 @@ You can also specify the IP addresse to serve on, as well as the port with the s
 
 You can receive the zipped file using the same command as for a single file.
 
+### Clean /tmp
+
+If you do not shutdown your computer often like me, the .zip created by `shaloc` while compressing folders will stay for a long time in /tmp. So there is the `clean` command that will wipe everything that ends by ".zip" in /tmp. It is super easy to use:
+
+```
+$ shaloc clean
+WARN[0000] Wiped /tmp/FgdYhsOI.zip
+```
+
 ## Completion
 
 Completion is supported on multiple shells.
