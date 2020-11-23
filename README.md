@@ -37,7 +37,12 @@ $ shaloc serve -f myfile.txt
 Serving myfile.txt on http://127.0.0.1:8080/myfile.txt
 ```
 
-Note that you can choose the IP and the port (respectively -i and -p). With the flag -r, you can randomize the URI with a given length.
+Note that you can choose the IP and the port (respectively -i and -p). With the flag -r, you can randomize the URI with a given length. For example :
+
+```
+$ shaloc serve -f picture.png -i 192.168.25.33 -p 1337 -r 15
+Serving picture.png http://192.168.25.33:1337/sbChTqWQqPOiFqz
+```
 
 * To receive:
 
@@ -128,7 +133,7 @@ $ shaloc completion fish > ~/.config/fish/completions/shaloc.fish
 
 ## Security note
 
-By design, nothing is encrypted in `shaloc` which make it vulnerable to eavesdropping attacks such as [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). Also, anyone with the link to your file can download it. You should not use `shaloc` outside your private network, or with sensitive files/folders.
+By design, nothing is encrypted in `shaloc` which make it vulnerable to eavesdropping attacks such as [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). Also, anyone with the link to your file can download it. You should not use `shaloc` outside your private network, or with sensitive files/folders. If you plan to share something that should not be guessed, use the `-r` flag to randomize the URI with a random string of the length you want.
 
 ## License
 
