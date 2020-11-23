@@ -37,7 +37,7 @@ $ shaloc serve -f myfile.txt
 Serving myfile.txt on http://127.0.0.1:8080/myfile.txt
 ```
 
-Note that you can choose the IP and the port (respectively -i and -p). With the flag -r, you can randomize the URI with a given length. For example :
+Note that you can choose the IP and the port (respectively `-i` and `-p`). With the flag `-r`, you can randomize the URI with a given length. For example :
 
 ```
 $ shaloc serve -f picture.png -i 192.168.25.33 -p 1337 -r 15
@@ -64,11 +64,11 @@ Serving /home/sup3r-f0ld3r on http://127.0.0.1:8080/AHjdifpLMz.zip
 ```
 
 In order to simplify the use, the zip file is renamed with a random string.
-You can also specify the IP addresse to serve on, as well as the port with the same flags as before (-i and -p), and randomize the URI as well.
+You can also specify the IP addresse to serve on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`
 
 * To receive:
 
-You can receive the zipped file using the same command as for a single file.
+You can receive the zip file using the same command as for a single file.
 
 ### Clean /tmp
 
