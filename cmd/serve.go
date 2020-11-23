@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -32,6 +33,15 @@ This will serve blah.txt on 192.168.1.36:1337:
 		if file == "" {
 			fmt.Println("You must provide a file to share with the flag -f !")
 			os.Exit(1)
+		}
+
+		isF, err := isFolder(file)
+		if err != nil {
+			logrus.Errorf("%s", err)
+		}
+
+		if isF {
+
 		}
 
 		// If the user provided a full path, we want to keep only the filename.
@@ -67,4 +77,17 @@ func init() {
 	serveCmd.Flags().StringP("ip", "i", "127.0.0.1", "IP address to serve on.")
 	serveCmd.Flags().StringP("port", "p", "8080", "Port to serve on.")
 	serveCmd.Flags().StringP("file", "f", "", "File to share.")
+}
+
+func isFolder(name string) (bool, error) {
+	fi, err := os.Stat(name)
+	if err != nil {
+		return false, err
+	}
+
+	if mode := fi.Mode(); mode.IsDir() {
+		return true, nil
+	}
+
+	return false, nil
 }
