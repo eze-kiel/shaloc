@@ -117,6 +117,10 @@ To load completions for each session, execute once:
 $ shaloc completion fish > ~/.config/fish/completions/shaloc.fish
 ```
 
+## Security note
+
+By design, nothing is encrypted in `shaloc` which make it vulnerable to eavesdropping attacks such as [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). Also, anyone with the link to your file can download it. You should not use `shaloc` outside your private network, or with sensitive files/fodlers.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
