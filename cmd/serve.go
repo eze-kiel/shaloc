@@ -71,19 +71,20 @@ This will serve blah.txt on 192.168.1.36:1337:
 			w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
 			w.Header().Set("Content-Length", r.Header.Get("Content-Length"))
 
-			Openfile, err := os.Open(file)
+			openfile, err := os.Open(file)
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
 
-			io.Copy(w, Openfile)
+			io.Copy(w, openfile)
 		})
 
 		fmt.Printf("Now serving on http://%s:%s/%s\n", ip, port, fileShort)
-		srv := &http.Server{Addr: ip + ":" + port}
+		srv := &http.Server{
+			Addr: ip + ":" + port,
+		}
 
-		// Handles networking errors, such as being unable to bind IP or port
 		if err := srv.ListenAndServe(); err != nil {
 			log.Printf("HTTP Server: ListenAndServe() error: %s", err)
 		}
