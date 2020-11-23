@@ -36,6 +36,9 @@ This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 		port, _ := cmd.Flags().GetString("port")
 		file, _ := cmd.Flags().GetString("file")
 		folder, _ := cmd.Flags().GetString("folder")
+		randomize, _ := cmd.Flags().GetInt("random")
+
+		var uri string
 
 		if file == "" && folder == "" {
 			fmt.Println("You must provide at least a file to share (-f) or a folder (-F) !")
@@ -64,11 +67,16 @@ This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 			}
 		}
 
-		// If the user provided a full path, we want to keep only the filename.
-		parts := strings.Split(file, "/")
-		fileShort := parts[len(parts)-1]
+		if randomize > 0 {
+			rand.Seed(time.Now().UnixNano())
+			uri = randID(randomize)
+		} else {
+			// If the user provided a full path, we want to keep only the filename.
+			parts := strings.Split(file, "/")
+			uri = parts[len(parts)-1]
+		}
 
-		http.HandleFunc("/"+fileShort, func(w http.ResponseWriter, r *http.Request) {
+		http.HandleFunc("/"+uri, func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Disposition", "attachment; filename="+file)
 			w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
 			w.Header().Set("Content-Length", r.Header.Get("Content-Length"))
@@ -86,11 +94,12 @@ This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 			Addr: ip + ":" + port,
 		}
 
+		fmt.Printf("Serving %s on http://%s:%s/%s\n", file, ip, port, uri)
+
 		if err := srv.ListenAndServe(); err != nil {
 			logrus.Errorf("%s", err)
 		}
 
-		fmt.Printf("Serving %s on http://%s:%s/%s\n", file, ip, port, fileShort)
 	},
 }
 
@@ -100,6 +109,7 @@ func init() {
 	serveCmd.Flags().StringP("port", "p", "8080", "Port to serve on.")
 	serveCmd.Flags().StringP("file", "f", "", "File to share.")
 	serveCmd.Flags().StringP("folder", "F", "", "Folder to share. It will be zipped.")
+	serveCmd.Flags().IntP("random", "r", 0, "Randomize the URI. The integer provided is the random string lentgh.")
 }
 
 func isFolder(name string) (bool, error) {
@@ -116,9 +126,9 @@ func isFolder(name string) (bool, error) {
 }
 
 // Generate a random string ID
-func randID() string {
+func randID(n int) string {
 	var runes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	b := make([]rune, 10)
+	b := make([]rune, n)
 	for i := range b {
 		b[i] = runes[rand.Intn(len(runes))]
 	}
@@ -126,10 +136,7 @@ func randID() string {
 }
 
 func compressFolder(source string) (string, error) {
-	rand.Seed(time.Now().UnixNano())
-	id := randID()
-
-	targetFile := "/tmp/" + id + ".zip"
+	targetFile := "/tmp/" + filepath.Base(source) + ".zip"
 	zipfile, err := os.Create(targetFile)
 	if err != nil {
 		return "", err
