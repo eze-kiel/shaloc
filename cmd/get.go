@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -35,7 +36,8 @@ This will create a file called new.txt:
 
 		err := download(name, url)
 		if err != nil {
-			panic(err)
+			logrus.Errorf("%s\n", err)
+			return
 		}
 
 		fmt.Println("Downloaded: " + url)
