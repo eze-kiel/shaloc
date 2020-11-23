@@ -48,11 +48,17 @@ Serving picture.png http://192.168.25.33:1337/sbChTqWQqPOiFqz
 
 ```
 $ shaloc get -u http://127.0.0.1:8080/myfile.txt
+Downloaded: out from http://127.0.0.1:8080/toto.txt
 ```
 
 Or whatever tool you want (`wget`, `curl`, your favorite browser...).
 
-The content will be wrote in a file called `out`, but you can change the name with the flag -o.
+The content will be wrote in a file called `out`, but you can change the name with the flag `-o`:
+
+```
+$ shaloc get -u http://127.0.0.1:8080/myfile.txt -o better-name.txt
+Downloaded: better-name.txt from http://127.0.0.1:8080/toto.txt
+```
 
 ### Share a folder
 
@@ -63,8 +69,7 @@ $ shaloc serve -F /home/sup3r-f0ld3r
 Serving /home/sup3r-f0ld3r on http://127.0.0.1:8080/AHjdifpLMz.zip
 ```
 
-In order to simplify the use, the zip file is renamed with a random string.
-You can also specify the IP addresse to serve on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`
+You can also specify the IP addresse to serve on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`.
 
 * To receive:
 
