@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"archive/zip"
+	"context"
 	"fmt"
 	"io"
 	"math/rand"
@@ -38,6 +39,7 @@ This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 		file, _ := cmd.Flags().GetString("file")
 		folder, _ := cmd.Flags().GetString("folder")
 		randomize, _ := cmd.Flags().GetInt("random")
+		maxDownloads, _ := cmd.Flags().GetInt("max")
 
 		var uri string
 
@@ -77,6 +79,13 @@ This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 			uri = parts[len(parts)-1]
 		}
 
+		srv := &http.Server{
+			Addr: ip + ":" + port,
+		}
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
 		http.HandleFunc("/"+uri, func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Disposition", "attachment; filename="+file)
 			w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
@@ -89,17 +98,29 @@ This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 			}
 
 			io.Copy(w, openfile)
+
+			if maxDownloads >= 0 {
+				maxDownloads--
+				if maxDownloads == 0 {
+					cancel()
+				}
+				logrus.Infof("Downloads remaining: %d", maxDownloads)
+			}
 		})
 
-		srv := &http.Server{
-			Addr: ip + ":" + port,
-		}
-
 		fmt.Printf("Serving %s on http://%s:%s/%s\n", file, ip, port, uri)
+		go func() {
+			if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				logrus.Warnf("%s", err)
+			}
+		}()
 
-		if err := srv.ListenAndServe(); err != nil {
-			logrus.Errorf("%s", err)
+		select {
+		case <-ctx.Done():
+			// Shutdown the server when the context is canceled
+			srv.Shutdown(ctx)
 		}
+		logrus.Infof("Max number of downloads reached, shutting down the server.")
 
 	},
 }
@@ -111,6 +132,7 @@ func init() {
 	serveCmd.Flags().StringP("file", "f", "", "File to share.")
 	serveCmd.Flags().StringP("folder", "F", "", "Folder to share. It will be zipped.")
 	serveCmd.Flags().IntP("random", "r", 0, "Randomize the URI. The integer provided is the random string lentgh.")
+	serveCmd.Flags().IntP("max", "m", -1, "Maximum number of downloads.")
 }
 
 func isFolder(name string) (bool, error) {
