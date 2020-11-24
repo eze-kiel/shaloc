@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 	"syscall"
 	"time"
 
@@ -43,6 +44,11 @@ This will create a file called new.txt:
 			os.Exit(1)
 		}
 
+		if output == "" {
+			parts := strings.SplitAfter(url, "/")
+			output = parts[len(parts)-1]
+		}
+
 		err := download(output, url)
 		if err != nil {
 			logrus.Errorf("%s\n", err)
@@ -73,7 +79,7 @@ This will create a file called new.txt:
 func init() {
 	rootCmd.AddCommand(getCmd)
 	getCmd.Flags().StringP("url", "u", "", "URL to download the file from.")
-	getCmd.Flags().StringP("output", "o", "out", "Name of the file that will be downloaded.")
+	getCmd.Flags().StringP("output", "o", "", "Name of the file that will be downloaded.")
 	getCmd.Flags().Bool("aes", false, "Use AES-256 decryption.")
 }
 
