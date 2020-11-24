@@ -31,13 +31,13 @@ var shareCmd = &cobra.Command{
 	Short: "Share a file or a folder",
 	Long: `share allow you to start a HTTP server to share a file or a folder. For example:
 
-This will share the file test.txt on 127.0.0.1:8080
+This will share the file test.txt on all interfaces on port 8080
   shaloc share -f test.txt
 
 This will share blah.txt on 192.168.1.36:1337:
   shaloc share -f blah.txt -i 192.168.1.36 -p 1337
 
-This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
+This will share the folder /home/user/sup3r-f0ld3r on 0.0.0.0:8080:
   shaloc share -F /home/user/sup3r-f0ld3r
 `,
 
