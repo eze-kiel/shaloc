@@ -70,7 +70,7 @@ Downloaded: out from http://127.0.0.1:8080/myfile.txt
 
 Or use whatever tool you want (`wget`, `curl`, your favorite browser...).
 
-The content will be wrote in a file called `out`, but you can change the name with the flag `-o`:
+The content will be wrote in a file called as the file name in the url, but you can change the name with the flag `-o`:
 
 ```
 $ shaloc get -u http://127.0.0.1:8080/myfile.txt -o better-name.txt
@@ -89,7 +89,7 @@ Sharing /tmp/sup3r-f0ld3r.zip on http://127.0.0.1:8080/sup3r-f0ld3r.zip
 
 You can also specify the IP addresse to share on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`.
 
-You can receive the zip file using the same command as for a single file. By default, it will also be named `out`.
+You can receive the zip file using the same command as for a single file.
 
 ### Share something a limited number of times
 
