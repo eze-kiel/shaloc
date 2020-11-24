@@ -6,6 +6,8 @@
 
 `shaloc` is a LAN-scoped sharing tool. With only 2 main commands, it is designed to be intuitive, easy and fast to use.
 
+It has few features: URI randomization, AES-256 encryption/decryption, archive creation...
+
 ## Getting started
 
 There is multiple ways to get `shaloc` on your machine. You can either:
