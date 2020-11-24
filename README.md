@@ -127,6 +127,12 @@ Decrypted out in out.dec
 
 `shaloc` uses AES-256 encryption. To generate the 32 bytes key, it hashes the provided password with SHA256.
 
+If you forgot to use `--aes` to download the file, don't worry ! You can still decrypt your file using this command:
+
+```
+$ shaloc decrypt file.txt
+```
+
 ### Clean /tmp
 
 If you do not shutdown your computer often like me, the .zip created by `shaloc` while compressing folders will stay for a long time in /tmp. So there is the `clean` command that will wipe everything that ends by ".zip" in /tmp. It is super easy to use:
