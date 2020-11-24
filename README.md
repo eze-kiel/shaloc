@@ -48,7 +48,7 @@ Serving picture.png http://192.168.25.33:1337/sbChTqWQqPOiFqz
 
 ```
 $ shaloc get -u http://127.0.0.1:8080/myfile.txt
-Downloaded: out from http://127.0.0.1:8080/toto.txt
+Downloaded: out from http://127.0.0.1:8080/myfile.txt
 ```
 
 Or whatever tool you want (`wget`, `curl`, your favorite browser...).
@@ -57,7 +57,7 @@ The content will be wrote in a file called `out`, but you can change the name wi
 
 ```
 $ shaloc get -u http://127.0.0.1:8080/myfile.txt -o better-name.txt
-Downloaded: better-name.txt from http://127.0.0.1:8080/toto.txt
+Downloaded: better-name.txt from http://127.0.0.1:8080/myfile.txt
 ```
 
 ### Share a folder
