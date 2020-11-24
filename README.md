@@ -175,7 +175,7 @@ $ shaloc completion fish > ~/.config/fish/completions/shaloc.fish
 
 ## Security note
 
-By default, nothing is encrypted in `shaloc` which make it vulnerable to eavesdropping attacks such as [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). Also, anyone with the link to your file can download it. If you want to send encrypted files, please use the flag `--aes`. It will ask you for a passphrase that will be needed by the receiver to decrypt the file.
+By default, nothing is encrypted in `shaloc` which make it vulnerable to eavesdropping attacks such as [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). Also, anyone with the link to your file can download it. If you want to send encrypted files, **please use the flag `--aes`**. It will ask you for a passphrase that will be needed by the receiver to decrypt the file.
 
 If you plan to share something that should not be guessed, use the `-r` flag to randomize the URI with a random string of the length you want.
 
