@@ -162,7 +162,7 @@ This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 
 func init() {
 	rootCmd.AddCommand(shareCmd)
-	shareCmd.Flags().StringP("ip", "i", "127.0.0.1", "IP address to serve on.")
+	shareCmd.Flags().StringP("ip", "i", "0.0.0.0", "IP address to serve on.")
 	shareCmd.Flags().StringP("port", "p", "8080", "Port to serve on.")
 	shareCmd.Flags().StringP("file", "f", "", "File to share.")
 	shareCmd.Flags().StringP("folder", "F", "", "Folder to share. It will be zipped.")
