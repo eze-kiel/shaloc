@@ -8,6 +8,21 @@
 
 It has few features: URI randomization, AES-256 encryption/decryption, archive creation...
 
+- [shaloc](#shaloc)
+  - [Getting started](#getting-started)
+  - [Usage](#usage)
+    - [Share a single file](#share-a-single-file)
+    - [Share a folder](#share-a-folder)
+    - [Share something a limited number of times](#share-something-a-limited-number-of-times)
+    - [Share an encrypted file/folder](#share-an-encrypted-filefolder)
+    - [Clean /tmp](#clean-tmp)
+  - [Completion](#completion)
+    - [Bash](#bash)
+    - [Zsh](#zsh)
+    - [Fish](#fish)
+  - [Security note](#security-note)
+  - [License](#license)
+
 ## Getting started
 
 There is multiple ways to get `shaloc` on your machine. You can either:
@@ -76,7 +91,7 @@ You can also specify the IP addresse to share on, as well as the port with the s
 
 You can receive the zip file using the same command as for a single file. By default, it will also be named `out`.
 
-### Share a limited number of files
+### Share something a limited number of times
 
 By default, the file can be downloaded an unlimited amout of times. If you want your file to be downloaded only a certain number of times, you can specify it thanks to the `-m` flag. If it is a negative value (which is the default case), your file will be available until server shutdown. Elsewhere, the value of the flag defines the number of times it can be downloaded. Here is an example:
 
@@ -125,7 +140,7 @@ WARN[0000] Wiped /tmp/FgdYhsOI.zip
 
 Completion is supported on multiple shells.
 
-### Bash:
+### Bash
 
 ```
 $ source <(shaloc completion bash)
@@ -145,7 +160,7 @@ MacOS:
 $ shaloc completion bash > /usr/local/etc/bash_completion.d/shaloc
 ```
 
-### Zsh:
+### Zsh
 
 If shell completion is not already enabled in your environment you will need to enable it.  You can execute the following once:
 
@@ -161,7 +176,7 @@ $ shaloc completion zsh > "${fpath[1]}/_shaloc"
 
 You will need to start a new shell for this setup to take effect.
 
-### Fish:
+### Fish
 
 ```
 $ shaloc completion fish | source
