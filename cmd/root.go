@@ -10,6 +10,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	// Version holds the build version
+	Version string
+	// BuildDate holds the build date
+	BuildDate string
+)
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "shaloc",
