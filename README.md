@@ -32,7 +32,7 @@ This section will cover typical use cases.
 
 ### Share a single file
 
-* To send:
+The minimal command to share a single file is the following:
 
 ```
 $ shaloc share -f myfile.txt
@@ -46,14 +46,14 @@ $ shaloc share -f picture.png -i 192.168.25.33 -p 1337 -r 15
 Sharing picture.png http://192.168.25.33:1337/sbChTqWQqPOiFqz
 ```
 
-* To receive:
+To receive a file, you can enter:
 
 ```
 $ shaloc get -u http://127.0.0.1:8080/myfile.txt
 Downloaded: out from http://127.0.0.1:8080/myfile.txt
 ```
 
-Or whatever tool you want (`wget`, `curl`, your favorite browser...).
+Or use whatever tool you want (`wget`, `curl`, your favorite browser...).
 
 The content will be wrote in a file called `out`, but you can change the name with the flag `-o`:
 
@@ -64,7 +64,7 @@ Downloaded: better-name.txt from http://127.0.0.1:8080/myfile.txt
 
 ### Share a folder
 
-* To send:
+This command is the minimal command to share a folder:
 
 ```
 $ shaloc share -F /home/user/sup3r-f0ld3r
@@ -73,8 +73,6 @@ Sharing /tmp/sup3r-f0ld3r.zip on http://127.0.0.1:8080/sup3r-f0ld3r.zip
 ```
 
 You can also specify the IP addresse to share on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`.
-
-* To receive:
 
 You can receive the zip file using the same command as for a single file. By default, it will also be named `out`.
 
