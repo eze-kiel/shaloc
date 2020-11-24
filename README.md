@@ -51,7 +51,7 @@ The minimal command to share a single file is the following:
 
 ```
 $ shaloc share -f myfile.txt
-Sharing myfile.txt on http://127.0.0.1:8080/myfile.txt
+Sharing myfile.txt on http://0.0.0.0:8080/myfile.txt
 ```
 
 Note that you can choose the IP and the port (respectively `-i` and `-p`). With the flag `-r`, you can randomize the URI with a given length. For example :
@@ -84,7 +84,7 @@ This command is the minimal command to share a folder:
 ```
 $ shaloc share -F /home/user/sup3r-f0ld3r
 INFO[0000] Zipping /home/user/sup3r-f0ld3r into /tmp/sup3r-f0ld3r.zip... 
-Sharing /tmp/sup3r-f0ld3r.zip on http://127.0.0.1:8080/sup3r-f0ld3r.zip
+Sharing /tmp/sup3r-f0ld3r.zip on http://0.0.0.0:8080/sup3r-f0ld3r.zip
 ```
 
 You can also specify the IP addresse to share on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`.
@@ -97,7 +97,7 @@ By default, the file can be downloaded an unlimited amout of times. If you want 
 
 ```
 $ ./shaloc share -f foobar.txt -m 2
-Sharing foobar.txt on http://127.0.0.1:8080/foobar.txt
+Sharing foobar.txt on http://0.0.0.0:8080/foobar.txt
 INFO[0003] Downloads remaining: 1                       
 INFO[0006] Downloads remaining: 0                       
 INFO[0006] Max number of downloads reached, shutting down the server.
@@ -113,7 +113,7 @@ You can easily share an encrypted file/folder :
 $ shaloc share -F /home/user/folder --aes
 Type encryption key:
 INFO[0001] Zipping /home/user/folder into /tmp/folder.zip... 
-Sharing /tmp/folder.zip on http://127.0.0.1:8080/folder.zip
+Sharing /tmp/folder.zip on http://0.0.0.0:8080/folder.zip
 ```
 
 To receive it, just launch:
