@@ -43,7 +43,7 @@ The releases are [here](https://github.com/eze-kiel/shaloc/releases).
 
 ## Usage
 
-This section will cover typical use cases.
+This section will cover typical use cases. If you need a more in-depth explaination about commands and flags, check [the wiki](https://github.com/eze-kiel/shaloc/wiki).
 
 ### Share a single file
 
