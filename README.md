@@ -33,15 +33,15 @@ This section will cover typical use cases.
 * To send:
 
 ```
-$ shaloc serve -f myfile.txt
-Serving myfile.txt on http://127.0.0.1:8080/myfile.txt
+$ shaloc share -f myfile.txt
+Sharing myfile.txt on http://127.0.0.1:8080/myfile.txt
 ```
 
 Note that you can choose the IP and the port (respectively `-i` and `-p`). With the flag `-r`, you can randomize the URI with a given length. For example :
 
 ```
-$ shaloc serve -f picture.png -i 192.168.25.33 -p 1337 -r 15
-Serving picture.png http://192.168.25.33:1337/sbChTqWQqPOiFqz
+$ shaloc share -f picture.png -i 192.168.25.33 -p 1337 -r 15
+Sharing picture.png http://192.168.25.33:1337/sbChTqWQqPOiFqz
 ```
 
 * To receive:
@@ -65,12 +65,12 @@ Downloaded: better-name.txt from http://127.0.0.1:8080/myfile.txt
 * To send:
 
 ```
-$ shaloc serve -F /home/user/sup3r-f0ld3r
+$ shaloc share -F /home/user/sup3r-f0ld3r
 INFO[0000] Zipping /home/user/sup3r-f0ld3r into /tmp/sup3r-f0ld3r.zip... 
-Serving /tmp/sup3r-f0ld3r.zip on http://127.0.0.1:8080/sup3r-f0ld3r.zip
+Sharing /tmp/sup3r-f0ld3r.zip on http://127.0.0.1:8080/sup3r-f0ld3r.zip
 ```
 
-You can also specify the IP addresse to serve on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`.
+You can also specify the IP addresse to share on, as well as the port with the same flags as before (`-i` and `-p`), and randomize the URI as well with `-r`.
 
 * To receive:
 
@@ -81,8 +81,8 @@ You can receive the zip file using the same command as for a single file. By def
 By default, the file can be downloaded an unlimited amout of times. If you want your file to be downloaded only a certain number of times, you can specify it thanks to the `-m` flag. If it is a negative value (which is the default case), your file will be available until server shutdown. Elsewhere, the value of the flag defines the number of times it can be downloaded. Here is an example:
 
 ```
-$ ./shaloc serve -f foobar.txt -m 2
-Serving foobar.txt on http://127.0.0.1:8080/foobar.txt
+$ ./shaloc share -f foobar.txt -m 2
+Sharing foobar.txt on http://127.0.0.1:8080/foobar.txt
 INFO[0003] Downloads remaining: 1                       
 INFO[0006] Downloads remaining: 0                       
 INFO[0006] Max number of downloads reached, shutting down the server.
