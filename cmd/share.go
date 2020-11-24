@@ -129,15 +129,12 @@ This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 
 			}
 
-			if useAES && maxDownloads > 0 {
-				if err := os.Remove(file); err != nil {
-					logrus.Fatalf("%s", err)
-				}
-			}
-
 			if maxDownloads >= 0 {
 				maxDownloads--
 				if maxDownloads == 0 {
+					if err := os.Remove(file); err != nil {
+						logrus.Fatalf("%s", err)
+					}
 					cancel()
 				}
 				logrus.Infof("Downloads remaining: %d", maxDownloads)
