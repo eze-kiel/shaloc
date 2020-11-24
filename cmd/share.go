@@ -17,20 +17,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// serveCmd represents the serve command
-var serveCmd = &cobra.Command{
-	Use:   "serve",
-	Short: "Serve a file or a folder",
-	Long: `serve allow you to start a HTTP server to serve a file or a folder. For example:
+// shareCmd represents the share command
+var shareCmd = &cobra.Command{
+	Use:   "share",
+	Short: "Share a file or a folder",
+	Long: `share allow you to start a HTTP server to share a file or a folder. For example:
 
-This will serve the file test.txt on 127.0.0.1:8080
-  shaloc serve -f test.txt
+This will share the file test.txt on 127.0.0.1:8080
+  shaloc share -f test.txt
 
-This will serve blah.txt on 192.168.1.36:1337:
-  shaloc serve -f blah.txt -i 192.168.1.36 -p 1337
+This will share blah.txt on 192.168.1.36:1337:
+  shaloc share -f blah.txt -i 192.168.1.36 -p 1337
 
-This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
-  shaloc server -F /home/user/sup3r-f0ld3r
+This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
+  shaloc share -F /home/user/sup3r-f0ld3r
 `,
 
 	Run: func(cmd *cobra.Command, args []string) {
@@ -108,7 +108,7 @@ This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 			}
 		})
 
-		fmt.Printf("Serving %s on http://%s:%s/%s\n", file, ip, port, uri)
+		fmt.Printf("Sharing %s on http://%s:%s/%s\n", file, ip, port, uri)
 		go func() {
 			if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 				logrus.Warnf("%s", err)
@@ -126,13 +126,13 @@ This will serve the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 }
 
 func init() {
-	rootCmd.AddCommand(serveCmd)
-	serveCmd.Flags().StringP("ip", "i", "127.0.0.1", "IP address to serve on.")
-	serveCmd.Flags().StringP("port", "p", "8080", "Port to serve on.")
-	serveCmd.Flags().StringP("file", "f", "", "File to share.")
-	serveCmd.Flags().StringP("folder", "F", "", "Folder to share. It will be zipped.")
-	serveCmd.Flags().IntP("random", "r", 0, "Randomize the URI. The integer provided is the random string lentgh.")
-	serveCmd.Flags().IntP("max", "m", -1, "Maximum number of downloads.")
+	rootCmd.AddCommand(shareCmd)
+	shareCmd.Flags().StringP("ip", "i", "127.0.0.1", "IP address to serve on.")
+	shareCmd.Flags().StringP("port", "p", "8080", "Port to serve on.")
+	shareCmd.Flags().StringP("file", "f", "", "File to share.")
+	shareCmd.Flags().StringP("folder", "F", "", "Folder to share. It will be zipped.")
+	shareCmd.Flags().IntP("random", "r", 0, "Randomize the URI. The integer provided is the random string lentgh.")
+	shareCmd.Flags().IntP("max", "m", -1, "Maximum number of downloads.")
 }
 
 func isFolder(name string) (bool, error) {
