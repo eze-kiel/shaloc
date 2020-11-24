@@ -16,7 +16,6 @@ It has few features: URI randomization, AES-256 encryption/decryption, archive c
     - [Share something a limited number of times](#share-something-a-limited-number-of-times)
     - [Share an encrypted file/folder](#share-an-encrypted-filefolder)
     - [Clean /tmp](#clean-tmp)
-    - [Update shaloc](#update-shaloc)
   - [Completion](#completion)
     - [Bash](#bash)
     - [Zsh](#zsh)
@@ -142,30 +141,6 @@ If you do not shutdown your computer often like me, the .zip created by `shaloc`
 $ shaloc clean
 WARN[0000] Wiped /tmp/FgdYhsOI.zip
 ```
-
-### Update shaloc
-
-It is easy to update `shaloc`:
-
-```
-$ shaloc update latest
-```
-
-will update `shaloc` to the latest version released.
-
-```
-$ shaloc update list
-```
-
-will display all the available versions.
-
-```
-$ shaloc update v1.2.0
-```
-
-will update `shaloc` to version v1.2.0.
-
-That's it !
 
 ## Completion
 
