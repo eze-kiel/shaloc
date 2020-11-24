@@ -90,6 +90,28 @@ INFO[0006] Max number of downloads reached, shutting down the server.
 
 It works for both `-f` and `-F` flags.
 
+### Share an encrypted file/folder
+
+You can easily share an encrypted file/folder :
+
+```
+$ shaloc share -F /home/user/folder --aes
+Type encryption key:
+INFO[0001] Zipping /home/user/folder into /tmp/folder.zip... 
+Sharing /tmp/folder.zip on http://127.0.0.1:8080/folder.zip
+```
+
+To receive it, just launch:
+
+```
+$ shaloc get -u http://127.0.0.1:8080/folder.zip --aes
+Downloaded: out from http://127.0.0.1:8080/folder.zip
+Type decryption key:
+Decrypted out in out.dec
+```
+
+`shaloc` uses AES-256 encryption. To generate the 32 bytes key, it hashes the provided password with SHA256.
+
 ### Clean /tmp
 
 If you do not shutdown your computer often like me, the .zip created by `shaloc` while compressing folders will stay for a long time in /tmp. So there is the `clean` command that will wipe everything that ends by ".zip" in /tmp. It is super easy to use:
@@ -153,7 +175,9 @@ $ shaloc completion fish > ~/.config/fish/completions/shaloc.fish
 
 ## Security note
 
-By design, nothing is encrypted in `shaloc` which make it vulnerable to eavesdropping attacks such as [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). Also, anyone with the link to your file can download it. You should not use `shaloc` outside your private network, or with sensitive files/folders. If you plan to share something that should not be guessed, use the `-r` flag to randomize the URI with a random string of the length you want.
+By default, nothing is encrypted in `shaloc` which make it vulnerable to eavesdropping attacks such as [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). Also, anyone with the link to your file can download it. If you want to send encrypted files, please use the flag `--aes`. It will ask you for a passphrase that will be needed by the receiver to decrypt the file.
+
+If you plan to share something that should not be guessed, use the `-r` flag to randomize the URI with a random string of the length you want.
 
 ## License
 
