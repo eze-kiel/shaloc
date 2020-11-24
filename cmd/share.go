@@ -3,19 +3,26 @@ package cmd
 import (
 	"archive/zip"
 	"context"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/sha256"
+	"encoding/binary"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/briandowns/spinner"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 // shareCmd represents the share command
@@ -41,6 +48,7 @@ This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 		folder, _ := cmd.Flags().GetString("folder")
 		randomize, _ := cmd.Flags().GetInt("random")
 		maxDownloads, _ := cmd.Flags().GetInt("max")
+		useAES, _ := cmd.Flags().GetBool("aes")
 
 		var uri string
 
@@ -52,6 +60,16 @@ This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 		if file != "" && folder != "" {
 			fmt.Println("You cannot provide a file and a folder !")
 			os.Exit(1)
+		}
+
+		var bytePassword []byte
+		var err error
+		if useAES {
+			fmt.Print("Type encryption key:\n")
+			bytePassword, err = terminal.ReadPassword(int(syscall.Stdin))
+			if err != nil {
+				logrus.Fatalf("%s", err)
+			}
 		}
 
 		if folder != "" {
@@ -90,7 +108,14 @@ This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 		http.HandleFunc("/"+uri, func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Disposition", "attachment; filename="+file)
 			w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
-			w.Header().Set("Content-Length", r.Header.Get("Content-Length"))
+			// w.Header().Set("Content-Length", r.Header.Get("Content-Length"))
+
+			if useAES {
+				file, err = encryptFile(string(bytePassword), file)
+				if err != nil {
+					log.Fatalf("%s", err)
+				}
+			}
 
 			openfile, err := os.Open(file)
 			if err != nil {
@@ -101,6 +126,13 @@ This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 			_, err = io.Copy(w, openfile)
 			if err != nil {
 				logrus.Errorf("%s", err)
+
+			}
+
+			if useAES && maxDownloads > 0 {
+				if err := os.Remove(file); err != nil {
+					logrus.Fatalf("%s", err)
+				}
 			}
 
 			if maxDownloads >= 0 {
@@ -139,6 +171,7 @@ func init() {
 	shareCmd.Flags().StringP("folder", "F", "", "Folder to share. It will be zipped.")
 	shareCmd.Flags().IntP("random", "r", 0, "Randomize the URI. The integer provided is the random string lentgh.")
 	shareCmd.Flags().IntP("max", "m", -1, "Maximum number of downloads.")
+	shareCmd.Flags().Bool("aes", false, "Encrypt file with AES-256.")
 }
 
 func isFolder(name string) (bool, error) {
@@ -235,4 +268,64 @@ func compressFolder(source string) (string, error) {
 	s.Stop()
 
 	return targetFile, err
+}
+
+func encryptFile(p, filename string) (string, error) {
+	outFilename := filename + ".enc"
+
+	key := sha256.Sum256([]byte(p))
+
+	plaintext, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+
+	of, err := os.Create(outFilename)
+	if err != nil {
+		return "", err
+	}
+	defer of.Close()
+
+	// Write the original plaintext size into the output file first, encoded in
+	// a 8-byte integer.
+	origSize := uint64(len(plaintext))
+	if err = binary.Write(of, binary.LittleEndian, origSize); err != nil {
+		return "", err
+	}
+
+	// Pad plaintext to a multiple of BlockSize with random padding.
+	if len(plaintext)%aes.BlockSize != 0 {
+		bytesToPad := aes.BlockSize - (len(plaintext) % aes.BlockSize)
+		padding := make([]byte, bytesToPad)
+		if _, err := rand.Read(padding); err != nil {
+			return "", err
+		}
+		plaintext = append(plaintext, padding...)
+	}
+
+	// Generate random IV and write it to the output file.
+	iv := make([]byte, aes.BlockSize)
+	if _, err := rand.Read(iv); err != nil {
+		return "", err
+	}
+	if _, err = of.Write(iv); err != nil {
+		return "", err
+	}
+
+	// Ciphertext has the same size as the padded plaintext.
+	ciphertext := make([]byte, len(plaintext))
+
+	// Use AES implementation of the cipher.Block interface to encrypt the whole
+	// file in CBC mode.
+	block, err := aes.NewCipher(key[:])
+	if err != nil {
+		return "", err
+	}
+	mode := cipher.NewCBCEncrypter(block, iv)
+	mode.CryptBlocks(ciphertext, plaintext)
+
+	if _, err = of.Write(ciphertext); err != nil {
+		return "", err
+	}
+	return outFilename, nil
 }
