@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -97,7 +98,10 @@ This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 				return
 			}
 
-			io.Copy(w, openfile)
+			_, err = io.Copy(w, openfile)
+			if err != nil {
+				logrus.Errorf("%s", err)
+			}
 
 			if maxDownloads >= 0 {
 				maxDownloads--
@@ -118,7 +122,9 @@ This will share the folder /home/user/sup3r-f0ld3r on 127.0.0.1:8080:
 		select {
 		case <-ctx.Done():
 			// Shutdown the server when the context is canceled
-			srv.Shutdown(ctx)
+			if err := srv.Shutdown(ctx); err != nil {
+				logrus.Errorf("%s", err)
+			}
 		}
 		logrus.Infof("Max number of downloads reached, shutting down the server.")
 
@@ -186,7 +192,7 @@ func compressFolder(source string) (string, error) {
 		baseDir = filepath.Base(source)
 	}
 
-	filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+	if err := filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -222,7 +228,9 @@ func compressFolder(source string) (string, error) {
 		defer file.Close()
 		_, err = io.Copy(writer, file)
 		return err
-	})
+	}); err != nil {
+		log.Fatalf("%s", err)
+	}
 
 	s.Stop()
 
