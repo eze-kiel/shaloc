@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"path/filepath"
 	"runtime"
 	"time"
 
@@ -129,7 +128,7 @@ func getLatest(r releases) error {
 
 	fullName := "shaloc_" + s.os + "_" + s.arch
 
-	binPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	binPath, err := os.Executable()
 	if err != nil {
 		return err
 	}
@@ -138,7 +137,7 @@ func getLatest(r releases) error {
 		if r[0].Assets[archNum].Name == fullName {
 
 			logrus.Info("Downloading shaloc:latest...")
-			if err := download(binPath+"/shaloc-tmp", "https://github.com/eze-kiel/shaloc/releases/download/"+r[0].TagName+"/"+fullName); err != nil {
+			if err := download(binPath+"-tmp", "https://github.com/eze-kiel/shaloc/releases/download/"+r[0].TagName+"/"+fullName); err != nil {
 				return err
 			}
 
@@ -147,15 +146,15 @@ func getLatest(r releases) error {
 			s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 			s.Start()
 
-			if err := os.Chmod(binPath+"/shaloc-tmp", 0775); err != nil {
+			if err := os.Chmod(binPath+"-tmp", 0775); err != nil {
 				return err
 			}
 
-			if err := os.Remove(binPath + "/shaloc"); err != nil {
+			if err := os.Remove(binPath); err != nil {
 				return err
 			}
 
-			if err := os.Rename(binPath+"/shaloc-tmp", binPath+"/shaloc"); err != nil {
+			if err := os.Rename(binPath+"-tmp", binPath); err != nil {
 				return err
 			}
 
@@ -184,7 +183,7 @@ func getSpecifiedVersion(r releases, version string) error {
 
 	fullName := "shaloc_" + s.os + "_" + s.arch
 
-	binPath, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	binPath, err := os.Executable()
 	if err != nil {
 		return err
 	}
@@ -192,7 +191,7 @@ func getSpecifiedVersion(r releases, version string) error {
 	versionsList := getVersionsList(r)
 	if stringInSlice(version, versionsList) {
 		logrus.Infof("Downloading shaloc:%s...", version)
-		if err := download(binPath+"/shaloc-tmp", "https://github.com/eze-kiel/shaloc/releases/download/"+version+"/"+fullName); err != nil {
+		if err := download(binPath+"-tmp", "https://github.com/eze-kiel/shaloc/releases/download/"+version+"/"+fullName); err != nil {
 			return err
 		}
 
@@ -201,15 +200,15 @@ func getSpecifiedVersion(r releases, version string) error {
 		s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 		s.Start()
 
-		if err := os.Chmod(binPath+"/shaloc-tmp", 0775); err != nil {
+		if err := os.Chmod(binPath+"-tmp", 0775); err != nil {
 			return err
 		}
 
-		if err := os.Remove(binPath + "/shaloc"); err != nil {
+		if err := os.Remove(binPath); err != nil {
 			return err
 		}
 
-		if err := os.Rename(binPath+"/shaloc-tmp", binPath+"/shaloc"); err != nil {
+		if err := os.Rename(binPath+"-tmp", binPath); err != nil {
 			return err
 		}
 
