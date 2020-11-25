@@ -166,7 +166,7 @@ func getVersionsList(r releases) []string {
 }
 
 func getSpecifiedVersion(r releases, version string) error {
-	if version == Version {
+	if version[1:] == Version {
 		logrus.Warn("This is the actual shaloc version.")
 		return nil
 	}
