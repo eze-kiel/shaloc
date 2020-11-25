@@ -61,31 +61,16 @@ This will list all available shaloc versions:
 
 This will update shaloc to v1.2.0:
   shaloc update v1.2.0  `,
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		r, err := parseReleasesAPI()
 		if err != nil {
 			logrus.Fatal(err)
 		}
-
-		switch args[0] {
-		case "list":
-			fmt.Println("Available versions:")
-			displayAvailableVersions(r)
-		case "latest":
-			if err := getLatest(r); err != nil {
-				logrus.Errorf("%s", err)
-			} else {
-				logrus.Infof("Success!")
-			}
-		default:
-			if err := getSpecifiedVersion(r, args[0]); err != nil {
-				logrus.Errorf("%s", err)
-			} else {
-				logrus.Infof("Success!")
-			}
+		if err := getSpecifiedVersion(r, args[0]); err != nil {
+			logrus.Errorf("%s", err)
+		} else {
+			logrus.Infof("Success!")
 		}
-
 	},
 }
 
@@ -141,7 +126,7 @@ func getLatest(r releases) error {
 	for archNum := 0; archNum < len(r[0].Assets); archNum++ {
 		if r[0].Assets[archNum].Name == fullName {
 
-			logrus.Info("Downloading shaloc:latest...")
+			logrus.Infof("Downloading shaloc:latest (%s)", r[0].TagName)
 			if err := download(binPath+"-tmp", "https://github.com/eze-kiel/shaloc/releases/download/"+r[0].TagName+"/"+fullName); err != nil {
 				return err
 			}
