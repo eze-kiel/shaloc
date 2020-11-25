@@ -121,6 +121,11 @@ func displayAvailableVersions(r releases) {
 }
 
 func getLatest(r releases) error {
+	if r[0].TagName[1:] == Version {
+		logrus.Warn("shaloc is already up to date.")
+		return nil
+	}
+
 	s := system{
 		os:   runtime.GOOS,
 		arch: runtime.GOARCH,
@@ -176,6 +181,11 @@ func getVersionsList(r releases) []string {
 }
 
 func getSpecifiedVersion(r releases, version string) error {
+	if version == Version {
+		logrus.Warn("This is the actual shaloc version.")
+		return nil
+	}
+
 	s := system{
 		os:   runtime.GOOS,
 		arch: runtime.GOARCH,
