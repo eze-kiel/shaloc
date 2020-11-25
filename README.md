@@ -1,29 +1,34 @@
-# shaloc
+<h1 align="center">shaloc</h1>
 
-**SHA**re files **LOC**ally !
+<p align="center"><b>SHA</b>re files <b>LOC</b>ally !</p>
 
 `shaloc` is a LAN-scoped sharing tool. With only 2 main commands, it is designed to be intuitive, easy and fast to use.
 
 It has few features: URI randomization, AES-256 encryption/decryption, archive creation...
 
+<p align="center">
+  <a href="https://github.com/eze-kiel/shaloc/releases">
+    <img src="https://img.shields.io/github/v/release/eze-kiel/shaloc" alt="Releases">
+  </a>
+  <img src="https://img.shields.io/github/v/release/eze-kiel/shaloc"alt="Releases">
+</p>
 ![release](https://img.shields.io/github/v/release/eze-kiel/shaloc)
 ![build](https://img.shields.io/github/workflow/status/eze-kiel/shaloc/Release%20Go%20project)
 
-- [shaloc](#shaloc)
-  - [Getting started](#getting-started)
-  - [Usage](#usage)
-    - [Share a single file](#share-a-single-file)
-    - [Share a folder](#share-a-folder)
-    - [Share something a limited number of times](#share-something-a-limited-number-of-times)
-    - [Share an encrypted file/folder](#share-an-encrypted-filefolder)
-    - [Clean /tmp](#clean-tmp)
-    - [Update shaloc](#update-shaloc)
-  - [Completion](#completion)
-    - [Bash](#bash)
-    - [Zsh](#zsh)
-    - [Fish](#fish)
-  - [Security note](#security-note)
-  - [License](#license)
+- [Getting started](#getting-started)
+- [Usage](#usage)
+  - [Share a single file](#share-a-single-file)
+  - [Share a folder](#share-a-folder)
+  - [Share something a limited number of times](#share-something-a-limited-number-of-times)
+  - [Share an encrypted file/folder](#share-an-encrypted-filefolder)
+  - [Clean /tmp](#clean-tmp)
+  - [Update shaloc](#update-shaloc)
+- [Completion](#completion)
+  - [Bash](#bash)
+  - [Zsh](#zsh)
+  - [Fish](#fish)
+- [Security note](#security-note)
+- [License](#license)
 
 ## Getting started
 
