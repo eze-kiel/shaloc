@@ -16,6 +16,7 @@ It has few features: URI randomization, AES-256 encryption/decryption, archive c
     - [Share something a limited number of times](#share-something-a-limited-number-of-times)
     - [Share an encrypted file/folder](#share-an-encrypted-filefolder)
     - [Clean /tmp](#clean-tmp)
+    - [Update shaloc](#update-shaloc)
   - [Completion](#completion)
     - [Bash](#bash)
     - [Zsh](#zsh)
