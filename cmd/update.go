@@ -98,8 +98,13 @@ func parseReleasesAPI() (releases, error) {
 }
 
 func displayAvailableVersions(r releases) {
+	fmt.Printf("%s / %s / %s\n\n", aurora.BgBrightCyan(aurora.BrightRed("current")), aurora.BrightRed("available"), aurora.Blue("build date"))
 	for i := 0; i < len(r); i++ {
-		fmt.Printf("%s (%s)\n", aurora.BrightRed(r[i].TagName), aurora.Blue(r[i].PublishedAt))
+		if r[i].TagName[1:] == Version {
+			fmt.Printf("%s (%s)\n", aurora.BgBrightCyan(aurora.BrightRed(r[i].TagName)), aurora.Blue(r[i].PublishedAt))
+		} else {
+			fmt.Printf("%s (%s)\n", aurora.BrightRed(r[i].TagName), aurora.Blue(r[i].PublishedAt))
+		}
 	}
 }
 
