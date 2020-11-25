@@ -39,3 +39,22 @@ func Test_getVersionsList(t *testing.T) {
 		})
 	}
 }
+
+func Test_stringInSlice(t *testing.T) {
+	tests := []struct {
+		name string
+		s    string
+		sl   []string
+		want bool
+	}{
+		{name: "case1", s: "plop", sl: []string{"plip", "plop", "ploup"}, want: true},
+		{name: "case2", s: "plop", sl: []string{"plip", "plap", "ploup"}, want: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := stringInSlice(tt.s, tt.sl); got != tt.want {
+				t.Errorf("stringInSlice() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
