@@ -12,8 +12,6 @@ It has few features: URI randomization, AES-256 encryption/decryption, archive c
   </a>
   <img src="https://img.shields.io/github/v/release/eze-kiel/shaloc"alt="Releases">
 </p>
-![release](https://img.shields.io/github/v/release/eze-kiel/shaloc)
-![build](https://img.shields.io/github/workflow/status/eze-kiel/shaloc/Release%20Go%20project)
 
 - [Getting started](#getting-started)
 - [Usage](#usage)
