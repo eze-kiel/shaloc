@@ -67,7 +67,7 @@ To receive a file, you can enter:
 
 ```
 $ shaloc get -u http://127.0.0.1:8080/myfile.txt
-Downloaded: out from http://127.0.0.1:8080/myfile.txt
+Downloaded: myfile.txt from http://127.0.0.1:8080/myfile.txt
 ```
 
 Or use whatever tool you want (`wget`, `curl`, your favorite browser...).
