@@ -4,7 +4,7 @@
 
 `shaloc` is a LAN-scoped sharing tool. With only 2 main commands, it is designed to be intuitive, easy and fast to use.
 
-It has few features: URI randomization, AES-256 encryption/decryption, archive creation...
+It has some cool features: URI randomization, AES-256 encryption/decryption, archive creation...
 
 <p align="center">
   <a href="https://github.com/eze-kiel/shaloc/releases">
