@@ -50,7 +50,7 @@ type system struct {
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update allow user to update shaloc.",
+	Short: "Update shaloc",
 	Long: `With update, you can update shaloc. For example:
 
 This will update shaloc to the latest release:
