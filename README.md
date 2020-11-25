@@ -10,10 +10,10 @@ It has few features: URI randomization, AES-256 encryption/decryption, archive c
   <a href="https://github.com/eze-kiel/shaloc/releases">
     <img src="https://img.shields.io/github/v/release/eze-kiel/shaloc" alt="Releases">
   </a>
-  <img src="https://img.shields.io/github/v/release/eze-kiel/shaloc"alt="Releases">
+  <a href="https://github.com/eze-kiel/shaloc/actions">
+    <img src="https://img.shields.io/github/workflow/status/eze-kiel/shaloc/Release%20Go%20project" alt="Build">
+  </a>
 </p>
-![release](https://img.shields.io/github/v/release/eze-kiel/shaloc)
-![build](https://img.shields.io/github/workflow/status/eze-kiel/shaloc/Release%20Go%20project)
 
 - [Getting started](#getting-started)
 - [Usage](#usage)
