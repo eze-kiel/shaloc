@@ -142,6 +142,28 @@ $ shaloc clean
 WARN[0000] Wiped /tmp/FgdYhsOI.zip
 ```
 
+### Update shaloc
+
+The command `update` has been added to update `shaloc`.
+
+* Update to the latest version:
+
+```
+$ shaloc update latest
+```
+
+* Update to a specified version (for example v1.4.1):
+
+```
+$ shaloc update v1.4.1
+```
+
+* The all the available updates:
+
+```
+$ shaloc update list
+```
+
 ## Completion
 
 Completion is supported on multiple shells.
