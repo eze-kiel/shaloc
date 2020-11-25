@@ -146,7 +146,7 @@ WARN[0000] Wiped /tmp/FgdYhsOI.zip
 
 ### Update shaloc
 
-The command `update` has been added to update `shaloc`.
+The command `update` allow you to easily keep `shaloc` up to date.
 
 * Update to the latest version:
 
@@ -160,7 +160,7 @@ $ shaloc update latest
 $ shaloc update v1.4.1
 ```
 
-* The all the available updates:
+* List all the available versions:
 
 ```
 $ shaloc update list
