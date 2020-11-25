@@ -68,8 +68,6 @@ This will update shaloc to v1.2.0:
 		}
 		if err := getSpecifiedVersion(r, args[0]); err != nil {
 			logrus.Errorf("%s", err)
-		} else {
-			logrus.Infof("Success!")
 		}
 	},
 }
@@ -150,6 +148,8 @@ func getLatest(r releases) error {
 
 			s.Stop()
 
+			logrus.Infof("Success!")
+
 			return nil
 		}
 	}
@@ -208,6 +208,8 @@ func getSpecifiedVersion(r releases, version string) error {
 		}
 
 		s.Stop()
+
+		logrus.Infof("Success!")
 		return nil
 	}
 
