@@ -2,11 +2,12 @@
 
 **SHA**re files **LOC**ally !
 
-(I couldn't find a better name...)
-
 `shaloc` is a LAN-scoped sharing tool. With only 2 main commands, it is designed to be intuitive, easy and fast to use.
 
 It has few features: URI randomization, AES-256 encryption/decryption, archive creation...
+
+![release](https://img.shields.io/github/v/release/eze-kiel/shaloc)
+![build](https://img.shields.io/github/workflow/status/eze-kiel/shaloc/Release%20Go%20project)
 
 - [shaloc](#shaloc)
   - [Getting started](#getting-started)

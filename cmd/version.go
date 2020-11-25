@@ -9,7 +9,7 @@ import (
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Version displays the version and the build date.",
+	Short: "Get the shaloc version and build date",
 	Long:  `version displays the version and the build date.`,
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {

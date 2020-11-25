@@ -15,7 +15,7 @@ import (
 // decryptCmd represents the decrypt command
 var decryptCmd = &cobra.Command{
 	Use:   "decrypt",
-	Short: "Decrypt is useful if you forget the --aes flag while getting a file.",
+	Short: "Decrypt is useful if you forget the --aes flag while getting a file",
 	Long: `decrypt allow you to decrypt a file on the disk if you forgot to use --aes flag. For example:
 
 This will decrypt toto.txt:

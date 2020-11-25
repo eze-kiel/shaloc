@@ -50,7 +50,7 @@ type system struct {
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update allow user to update shaloc.",
+	Short: "Update shaloc",
 	Long: `With update, you can update shaloc. For example:
 
 This will update shaloc to the latest release:
@@ -166,7 +166,7 @@ func getVersionsList(r releases) []string {
 }
 
 func getSpecifiedVersion(r releases, version string) error {
-	if version == Version {
+	if version[1:] == Version {
 		logrus.Warn("This is the actual shaloc version.")
 		return nil
 	}
