@@ -66,6 +66,13 @@ This will update shaloc to v1.2.0:
 		if err != nil {
 			logrus.Fatal(err)
 		}
+
+		// Avoid runtime error by checking if a version has been provided
+		if len(args) == 0 {
+			logrus.Errorf("You must provide a version. Check help with -h.")
+			os.Exit(1)
+		}
+
 		if err := getSpecifiedVersion(r, args[0]); err != nil {
 			logrus.Errorf("%s", err)
 		}
