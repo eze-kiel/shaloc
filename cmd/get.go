@@ -44,34 +44,51 @@ This will create a file called new.txt:
 			os.Exit(1)
 		}
 
+		// If no output name is provided, take the last part of the URI
 		if output == "" {
 			parts := strings.SplitAfter(url, "/")
 			output = parts[len(parts)-1]
 		}
 
-		err := download(output, url)
+		// Ask for the passphrase if needed
+		var bytePassword []byte
+		var err error
+		if useAES {
+			bytePassword, err = askForPass()
+			if err != nil {
+				logrus.Fatalf("%s", err)
+			}
+		}
+		err = download(output, url)
 		if err != nil {
 			logrus.Errorf("%s\n", err)
 			return
 		}
 
 		fmt.Println("Downloaded: " + output + " from " + url)
-		var bytePassword []byte
+
+		// If --aes, decrypt the file
 		if useAES {
-			fmt.Print("Type decryption key:\n")
-			bytePassword, err = terminal.ReadPassword(int(syscall.Stdin))
+			// Init and start the spinner
+			s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
+			s.Start()
+
+			tmp, err := decryptFile(string(bytePassword), output)
 			if err != nil {
 				logrus.Fatalf("%s", err)
 			}
 
-			// Init and start the spinner
-			s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
-			s.Start()
-			decryptFile(string(bytePassword), output)
-			os.Remove(output)
+			if err := os.Remove(output); err != nil {
+				logrus.Fatalf("%s", err)
+			}
+
+			if err := os.Rename(tmp, output); err != nil {
+				logrus.Fatalf("%s", err)
+			}
+
 			s.Stop()
 
-			fmt.Printf("Decrypted %s in %s.dec\n", output, output)
+			fmt.Printf("Decrypted %s\n.", output)
 		}
 	},
 }
@@ -83,13 +100,14 @@ func init() {
 	getCmd.Flags().Bool("aes", false, "Use AES-256 decryption.")
 }
 
+// download downloads a file from url and write it in filepath
 func download(filepath string, url string) error {
 
 	// Init and start the spinner
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Start()
 
-	// Get the data
+	// Get the data from the url
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -112,6 +130,7 @@ func download(filepath string, url string) error {
 	return err
 }
 
+// decryptFile decrypts filename with the key p using AES-256
 func decryptFile(p, filename string) (string, error) {
 	outFilename := filename + ".dec"
 
@@ -158,4 +177,26 @@ func decryptFile(p, filename string) (string, error) {
 		return "", err
 	}
 	return outFilename, nil
+}
+
+// askForPass ask for a passphrase twice.
+// If they do not match, it returns an error
+func askForPass() ([]byte, error) {
+	fmt.Println("Type decryption key:")
+	try, err := terminal.ReadPassword(int(syscall.Stdin))
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("Type decryption key again:")
+	try2, err := terminal.ReadPassword(int(syscall.Stdin))
+	if err != nil {
+		return nil, err
+	}
+
+	if string(try) != string(try2) {
+		return nil, fmt.Errorf("passwords do not match")
+	}
+
+	return try, nil
 }

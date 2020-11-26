@@ -55,47 +55,73 @@ This will share the folder /home/user/sup3r-f0ld3r on 0.0.0.0:8080:
 		if file == "" && folder == "" {
 			fmt.Println("You must provide at least a file to share (-f) or a folder (-F) !")
 			os.Exit(1)
-		}
-
-		if file != "" && folder != "" {
+		} else if file != "" && folder != "" {
 			fmt.Println("You cannot provide a file and a folder !")
 			os.Exit(1)
 		}
 
-		var bytePassword []byte
-		var err error
-		if useAES {
-			fmt.Print("Type encryption key:\n")
-			bytePassword, err = terminal.ReadPassword(int(syscall.Stdin))
-			if err != nil {
-				logrus.Fatalf("%s", err)
-			}
-		}
-
+		// If the folder flag is provided...
 		if folder != "" {
+			// ...be sure to serve a folder
 			isFol, err := isFolder(folder)
 			if err != nil {
 				logrus.Errorf("%s", err)
 				return
 			}
 
-			// If the provided file is a folder, zip it and share it
+			// Zip it
 			if isFol {
+				// If the user provided a full path, we want to keep only the filename.
+				parts := strings.Split(folder, "/")
+				if parts[len(parts)-1] == "" {
+					// If the path ends with /, the last item of parts will be an
+					// empty string
+					uri = parts[len(parts)-2] + ".zip"
+				} else {
+					uri = parts[len(parts)-1] + ".zip"
+				}
+
 				file, err = compressFolder(folder)
 				if err != nil {
 					logrus.Errorf("%s", err)
 					return
 				}
 			}
-		}
-
-		if randomize > 0 {
-			rand.Seed(time.Now().UnixNano())
-			uri = randID(randomize)
 		} else {
+			// Check if the file provided is really a file
+			isFol, err := isFolder(file)
+			if err != nil {
+				logrus.Errorf("%s", err)
+				return
+			}
+			// If not, log an error and exit
+			if isFol {
+				logrus.Errorf("%s", fmt.Errorf("%s is not a file", file))
+				os.Exit(1)
+			}
 			// If the user provided a full path, we want to keep only the filename.
 			parts := strings.Split(file, "/")
 			uri = parts[len(parts)-1]
+		}
+
+		// If the flag -r is provided, randomize the URI
+		if randomize > 0 {
+			rand.Seed(time.Now().UnixNano())
+			uri = randID(randomize)
+		}
+
+		// If the flag --aes is provided, ask for a passphrase
+		if useAES {
+			fmt.Print("Type encryption key:\n")
+			bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+			if err != nil {
+				logrus.Fatalf("%s", err)
+			}
+
+			file, err = encryptFile(string(bytePassword), file)
+			if err != nil {
+				log.Fatalf("%s", err)
+			}
 		}
 
 		srv := &http.Server{
@@ -108,14 +134,6 @@ This will share the folder /home/user/sup3r-f0ld3r on 0.0.0.0:8080:
 		http.HandleFunc("/"+uri, func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Disposition", "attachment; filename="+file)
 			w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
-			// w.Header().Set("Content-Length", r.Header.Get("Content-Length"))
-
-			if useAES {
-				file, err = encryptFile(string(bytePassword), file)
-				if err != nil {
-					log.Fatalf("%s", err)
-				}
-			}
 
 			openfile, err := os.Open(file)
 			if err != nil {
@@ -171,6 +189,7 @@ func init() {
 	shareCmd.Flags().Bool("aes", false, "Encrypt file with AES-256.")
 }
 
+// ifFolder returns true if name is a folder, false elsewhere.
 func isFolder(name string) (bool, error) {
 	fi, err := os.Stat(name)
 	if err != nil {
@@ -194,22 +213,22 @@ func randID(n int) string {
 	return string(b)
 }
 
+// compressFolder compresses recursively source, and returns the path of the compressed file
 func compressFolder(source string) (string, error) {
-	targetFile := "/tmp/" + filepath.Base(source) + ".zip"
+	// Create a temporary file prefixed with shaloc
+	of, err := ioutil.TempFile("", "shaloc")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer of.Close()
 
-	logrus.Infof("Zipping %s into %s...", source, targetFile)
+	logrus.Infof("Zipping %s into %s...", source, of.Name())
 
 	// Init and start the spinner
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Start()
 
-	zipfile, err := os.Create(targetFile)
-	if err != nil {
-		return "", err
-	}
-	defer zipfile.Close()
-
-	archive := zip.NewWriter(zipfile)
+	archive := zip.NewWriter(of)
 	defer archive.Close()
 
 	info, err := os.Stat(source)
@@ -264,11 +283,16 @@ func compressFolder(source string) (string, error) {
 
 	s.Stop()
 
-	return targetFile, err
+	return of.Name(), err
 }
 
 func encryptFile(p, filename string) (string, error) {
-	outFilename := filename + ".enc"
+	// Create a temporary file prefixed with shaloc
+	of, err := ioutil.TempFile("", "shaloc")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer of.Close()
 
 	key := sha256.Sum256([]byte(p))
 
@@ -276,12 +300,6 @@ func encryptFile(p, filename string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	of, err := os.Create(outFilename)
-	if err != nil {
-		return "", err
-	}
-	defer of.Close()
 
 	// Write the original plaintext size into the output file first, encoded in
 	// a 8-byte integer.
@@ -324,5 +342,5 @@ func encryptFile(p, filename string) (string, error) {
 	if _, err = of.Write(ciphertext); err != nil {
 		return "", err
 	}
-	return outFilename, nil
+	return of.Name(), nil
 }

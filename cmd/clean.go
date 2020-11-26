@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -17,7 +18,7 @@ This will remove all the .zip files in /tmp/
   shaloc clean
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		dirname := "/tmp/"
+		dirname := os.TempDir() + "/"
 
 		// Open the directory and read all its files.
 		dirRead, _ := os.Open(dirname)
@@ -31,9 +32,12 @@ This will remove all the .zip files in /tmp/
 			nameHere := fileHere.Name()
 			fullPath := dirname + nameHere
 
-			if string(nameHere[len(nameHere)-4:]) == ".zip" {
-				os.Remove(fullPath)
-				logrus.Warnf("Wiped %s", fullPath)
+			if strings.HasPrefix(nameHere, "shaloc") {
+				if err := os.Remove(fullPath); err != nil {
+					logrus.Errorf("%s", err)
+				} else {
+					logrus.Warnf("Wiped %s", fullPath)
+				}
 			}
 		}
 	},
