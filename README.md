@@ -7,12 +7,17 @@
 It has some cool features: URI randomization, AES-256 encryption/decryption, archive creation...
 
 <p align="center">
+
+  <a href="https://goreportcard.com/badge/github.com/eze-kiel/shaloc">
+    <img src="https://goreportcard.com/badge/github.com/eze-kiel/shaloc" alt="Go Report Card">
+  </a>
   <a href="https://github.com/eze-kiel/shaloc/releases">
     <img src="https://img.shields.io/github/v/release/eze-kiel/shaloc" alt="Releases">
   </a>
   <a href="https://github.com/eze-kiel/shaloc/actions">
     <img src="https://img.shields.io/github/workflow/status/eze-kiel/shaloc/Release%20Go%20project" alt="Build">
   </a>
+
 </p>
 
 - [Getting started](#getting-started)
