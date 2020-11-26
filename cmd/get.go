@@ -44,34 +44,52 @@ This will create a file called new.txt:
 			os.Exit(1)
 		}
 
+		// If no output name is provided, take the last part of the URI
 		if output == "" {
 			parts := strings.SplitAfter(url, "/")
 			output = parts[len(parts)-1]
 		}
 
-		err := download(output, url)
-		if err != nil {
-			logrus.Errorf("%s\n", err)
-			return
-		}
-
-		fmt.Println("Downloaded: " + output + " from " + url)
+		// Ask for the passphrase if needed
 		var bytePassword []byte
+		var err error
 		if useAES {
 			fmt.Print("Type decryption key:\n")
 			bytePassword, err = terminal.ReadPassword(int(syscall.Stdin))
 			if err != nil {
 				logrus.Fatalf("%s", err)
 			}
+		}
+		err = download(output, url)
+		if err != nil {
+			logrus.Errorf("%s\n", err)
+			return
+		}
 
+		fmt.Println("Downloaded: " + output + " from " + url)
+
+		// If --aes, decrypt the file
+		if useAES {
 			// Init and start the spinner
 			s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 			s.Start()
-			decryptFile(string(bytePassword), output)
-			os.Remove(output)
+
+			tmp, err := decryptFile(string(bytePassword), output)
+			if err != nil {
+				logrus.Fatalf("%s", err)
+			}
+
+			if err := os.Remove(output); err != nil {
+				logrus.Fatalf("%s", err)
+			}
+
+			if err := os.Rename(tmp, output); err != nil {
+				logrus.Fatalf("%s", err)
+			}
+
 			s.Stop()
 
-			fmt.Printf("Decrypted %s in %s.dec\n", output, output)
+			fmt.Printf("Decrypted %s\n", output)
 		}
 	},
 }
