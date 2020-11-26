@@ -142,11 +142,11 @@ $ shaloc decrypt file.txt
 
 ### Clean /tmp
 
-If you do not shutdown your computer often like me, the .zip created by `shaloc` while compressing folders will stay for a long time in /tmp. So there is the `clean` command that will wipe everything that ends by ".zip" in /tmp. It is super easy to use:
+When compressing folders, `shaloc` creates temporary files in your OS default temporary folder (for example /tmp with Linux). Those files are the ones that are shared. They are not deleted automatically when sharing ends, so there is the `clean` command that will wipe everything that has "shaloc" as prefix in your OS default temporary folder. It is super easy to use:
 
 ```
 $ shaloc clean
-WARN[0000] Wiped /tmp/FgdYhsOI.zip
+WARN[0000] Wiped /tmp/shaloc722022099
 ```
 
 ### Update shaloc
