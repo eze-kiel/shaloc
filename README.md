@@ -21,7 +21,7 @@ It has some cool features: URI randomization, AES-256 encryption/decryption, arc
   - [Share a folder](#share-a-folder)
   - [Share something a limited number of times](#share-something-a-limited-number-of-times)
   - [Share an encrypted file/folder](#share-an-encrypted-filefolder)
-  - [Clean /tmp](#clean-tmp)
+  - [Clean shaloc garbage](#clean-shaloc-garbage)
   - [Update shaloc](#update-shaloc)
 - [Completion](#completion)
   - [Bash](#bash)
@@ -140,7 +140,7 @@ If you forgot to use `--aes` to download the file, don't worry ! You can still d
 $ shaloc decrypt file.txt
 ```
 
-### Clean /tmp
+### Clean shaloc garbage
 
 When compressing folders, `shaloc` creates temporary files in your OS default temporary folder (for example /tmp with Linux). Those files are the ones that are shared. They are not deleted automatically when sharing ends, so there is the `clean` command that will wipe everything that has "shaloc" as prefix in your OS default temporary folder. It is super easy to use:
 
@@ -148,6 +148,8 @@ When compressing folders, `shaloc` creates temporary files in your OS default te
 $ shaloc clean
 WARN[0000] Wiped /tmp/shaloc722022099
 ```
+
+Obviously, this is optionnal: in most OS, this folder is cleaned when the computer reboots.
 
 ### Update shaloc
 
