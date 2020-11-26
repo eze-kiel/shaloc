@@ -18,6 +18,7 @@ var latestCmd = &cobra.Command{
 		if err != nil {
 			logrus.Fatal(err)
 		}
+
 		if err := getLatest(r); err != nil {
 			logrus.Errorf("%s", err)
 		}
