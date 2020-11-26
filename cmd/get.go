@@ -100,13 +100,14 @@ func init() {
 	getCmd.Flags().Bool("aes", false, "Use AES-256 decryption.")
 }
 
+// download downloads a file from url and write it in filepath
 func download(filepath string, url string) error {
 
 	// Init and start the spinner
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Start()
 
-	// Get the data
+	// Get the data from the url
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -129,6 +130,7 @@ func download(filepath string, url string) error {
 	return err
 }
 
+// decryptFile decrypts filename with the key p using AES-256
 func decryptFile(p, filename string) (string, error) {
 	outFilename := filename + ".dec"
 
@@ -177,6 +179,8 @@ func decryptFile(p, filename string) (string, error) {
 	return outFilename, nil
 }
 
+// askForPass ask for a passphrase twice.
+// If they do not match, it returns an error
 func askForPass() ([]byte, error) {
 	fmt.Println("Type decryption key:")
 	try, err := terminal.ReadPassword(int(syscall.Stdin))

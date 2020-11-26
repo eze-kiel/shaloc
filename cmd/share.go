@@ -55,15 +55,14 @@ This will share the folder /home/user/sup3r-f0ld3r on 0.0.0.0:8080:
 		if file == "" && folder == "" {
 			fmt.Println("You must provide at least a file to share (-f) or a folder (-F) !")
 			os.Exit(1)
-		}
-
-		if file != "" && folder != "" {
+		} else if file != "" && folder != "" {
 			fmt.Println("You cannot provide a file and a folder !")
 			os.Exit(1)
 		}
 
-		// If the folder flag is provided, be sure to serve a folder
+		// If the folder flag is provided...
 		if folder != "" {
+			// ...be sure to serve a folder
 			isFol, err := isFolder(folder)
 			if err != nil {
 				logrus.Errorf("%s", err)
@@ -72,42 +71,49 @@ This will share the folder /home/user/sup3r-f0ld3r on 0.0.0.0:8080:
 
 			// Zip it
 			if isFol {
+				// If the user provided a full path, we want to keep only the filename.
+				parts := strings.Split(folder, "/")
+				if parts[len(parts)-1] == "" {
+					// If the path ends with /, the last item of parts will be an
+					// empty string
+					uri = parts[len(parts)-2] + ".zip"
+				} else {
+					uri = parts[len(parts)-1] + ".zip"
+				}
+
 				file, err = compressFolder(folder)
 				if err != nil {
 					logrus.Errorf("%s", err)
 					return
 				}
 			}
-		}
-
-		// Check if the file provided is really a file
-		isFol, err := isFolder(file)
-		if err != nil {
-			logrus.Errorf("%s", err)
-			return
-		}
-
-		// If not, log an error and exit
-		if isFol {
-			logrus.Errorf("%s", fmt.Errorf("%s is not a file", file))
-			os.Exit(1)
+		} else {
+			// Check if the file provided is really a file
+			isFol, err := isFolder(file)
+			if err != nil {
+				logrus.Errorf("%s", err)
+				return
+			}
+			// If not, log an error and exit
+			if isFol {
+				logrus.Errorf("%s", fmt.Errorf("%s is not a file", file))
+				os.Exit(1)
+			}
+			// If the user provided a full path, we want to keep only the filename.
+			parts := strings.Split(file, "/")
+			uri = parts[len(parts)-1]
 		}
 
 		// If the flag -r is provided, randomize the URI
 		if randomize > 0 {
 			rand.Seed(time.Now().UnixNano())
 			uri = randID(randomize)
-		} else {
-			// If the user provided a full path, we want to keep only the filename.
-			parts := strings.Split(file, "/")
-			uri = parts[len(parts)-1]
 		}
 
-		// If the flag --aes is provided, ask for a apssphrase
-		var bytePassword []byte
+		// If the flag --aes is provided, ask for a passphrase
 		if useAES {
 			fmt.Print("Type encryption key:\n")
-			bytePassword, err = terminal.ReadPassword(int(syscall.Stdin))
+			bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
 			if err != nil {
 				logrus.Fatalf("%s", err)
 			}
@@ -183,6 +189,7 @@ func init() {
 	shareCmd.Flags().Bool("aes", false, "Encrypt file with AES-256.")
 }
 
+// ifFolder returns true if name is a folder, false elsewhere.
 func isFolder(name string) (bool, error) {
 	fi, err := os.Stat(name)
 	if err != nil {
@@ -206,22 +213,22 @@ func randID(n int) string {
 	return string(b)
 }
 
+// compressFolder compresses recursively source, and returns the path of the compressed file
 func compressFolder(source string) (string, error) {
-	targetFile := "/tmp/" + filepath.Base(source) + ".zip"
+	// Create a temporary file prefixed with shaloc
+	of, err := ioutil.TempFile("", "shaloc")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer of.Close()
 
-	logrus.Infof("Zipping %s into %s...", source, targetFile)
+	logrus.Infof("Zipping %s into %s...", source, of.Name())
 
 	// Init and start the spinner
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Start()
 
-	zipfile, err := os.Create(targetFile)
-	if err != nil {
-		return "", err
-	}
-	defer zipfile.Close()
-
-	archive := zip.NewWriter(zipfile)
+	archive := zip.NewWriter(of)
 	defer archive.Close()
 
 	info, err := os.Stat(source)
@@ -276,7 +283,7 @@ func compressFolder(source string) (string, error) {
 
 	s.Stop()
 
-	return targetFile, err
+	return of.Name(), err
 }
 
 func encryptFile(p, filename string) (string, error) {
