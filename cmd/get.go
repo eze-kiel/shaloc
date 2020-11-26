@@ -54,8 +54,7 @@ This will create a file called new.txt:
 		var bytePassword []byte
 		var err error
 		if useAES {
-			fmt.Print("Type decryption key:\n")
-			bytePassword, err = terminal.ReadPassword(int(syscall.Stdin))
+			bytePassword, err = askForPass()
 			if err != nil {
 				logrus.Fatalf("%s", err)
 			}
@@ -89,7 +88,7 @@ This will create a file called new.txt:
 
 			s.Stop()
 
-			fmt.Printf("Decrypted %s\n", output)
+			fmt.Printf("Decrypted %s\n.", output)
 		}
 	},
 }
@@ -176,4 +175,24 @@ func decryptFile(p, filename string) (string, error) {
 		return "", err
 	}
 	return outFilename, nil
+}
+
+func askForPass() ([]byte, error) {
+	fmt.Println("Type decryption key:")
+	try, err := terminal.ReadPassword(int(syscall.Stdin))
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("Type decryption key again:")
+	try2, err := terminal.ReadPassword(int(syscall.Stdin))
+	if err != nil {
+		return nil, err
+	}
+
+	if string(try) != string(try2) {
+		return nil, fmt.Errorf("passwords do not match")
+	}
+
+	return try, nil
 }
